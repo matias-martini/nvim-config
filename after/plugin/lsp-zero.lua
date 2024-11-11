@@ -57,14 +57,20 @@ require("lspconfig").lua_ls.setup {
     }
 }
 require("lspconfig").pyright.setup {
-  on_attach = on_attach,
-  on_new_config = function(config, root_dir)
-    local env = vim.trim(vim.fn.system('cd "' .. root_dir .. '"; poetry env info -p 2>/dev/null'))
-    if string.len(env) > 0 then
-      config.settings.python.pythonPath = env .. '/bin/python'
-    end
-  end
+    on_attach = on_attach,
+    on_new_config = function(config, root_dir)
+        local env = vim.trim(vim.fn.system('cd "' .. root_dir .. '"; poetry env info -p 2>/dev/null'))
+
+        if string.len(env) == 0 then
+            env = vim.trim(vim.fn.system('cd "' .. root_dir .. '/src"; poetry env info -p 2>/dev/null'))
+        end
+
+        if string.len(env) > 0 then
+            config.settings.python.pythonPath = env .. '/bin/python'
+        end
+    end,
 }
+
 require("lspconfig").ts_ls.setup {on_attach = on_attach}
 require("lspconfig").jsonls.setup {on_attach = on_attach}
 require("lspconfig").html.setup {on_attach = on_attach}
