@@ -162,6 +162,3 @@ require('gitsigns').setup {
         col = 1
     },
 }
-
-vim.cmd("colorscheme catppuccin")
-
