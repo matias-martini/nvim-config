@@ -28,13 +28,13 @@ require("lazy").setup({
     },
     {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
     {'nvim-treesitter/nvim-treesitter-refactor'},
+    {'nvim-treesitter/nvim-treesitter'},    
     {'williamboman/mason.nvim'},
     {'williamboman/mason-lspconfig.nvim'},
     {'neovim/nvim-lspconfig'},
     {'hrsh7th/cmp-nvim-lsp'},
     {'hrsh7th/nvim-cmp'},
     {'L3MON4D3/LuaSnip'},
-    { "github/copilot.vim" },
     { "lewis6991/gitsigns.nvim" },
     { "rebelot/kanagawa.nvim" },
     { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
@@ -67,10 +67,11 @@ require("lazy").setup({
         config = true
     },
     {
+    
         "yetone/avante.nvim",
         event = "VeryLazy",
-        lazy = false,
-        version = true, -- set this if you want to always pull the latest change
+        lazy = true,
+        version = false, -- set this if you want to always pull the latest change
         opts = {
             -- add any opts here
         },
@@ -78,6 +79,7 @@ require("lazy").setup({
         build = "make",
         -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
         dependencies = {
+            "nvim-treesitter/nvim-treesitter",
             "stevearc/dressing.nvim",
             "nvim-lua/plenary.nvim",
             "MunifTanjim/nui.nvim",
@@ -111,6 +113,7 @@ require("lazy").setup({
             },
         },
     },
+
     {"MeanderingProgrammer/render-markdown.nvim",
     opts = {
         file_types = { "markdown", "Avante" },

@@ -10,6 +10,7 @@ cmp.setup({
     { name = 'nvim_lsp' }, -- LSP suggestions
     { name = 'buffer' }, -- Buffer text suggestions
     { name = 'path' }, -- File path suggestions
+    { name = 'avante' }, -- Add Avante AI as a source
   },
 })
 vim.cmd("colorscheme catppuccin")

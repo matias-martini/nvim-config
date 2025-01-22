@@ -1,19 +1,6 @@
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.preset('recommended')
-
-lsp_zero.setup_nvim_cmp({
-  mapping = {
-    ['<Tab>'] = require('cmp').mapping.select_next_item(),
-    ['<S-Tab>'] = require('cmp').mapping.select_prev_item(),
-    ['<CR>'] = require('cmp').mapping.confirm({ select = true }), -- Accept the selected suggestion
-    ['<C-Space>'] = require('cmp').mapping.complete(), -- Trigger completion manually
-  }
-})
-
-lsp_zero.setup()
-
-lsp_zero.on_attach(function(_, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
@@ -36,22 +23,24 @@ require("mason-lspconfig").setup({
     "vimls",
     "eslint",
     "ruby_lsp",
+    "steep",
     "clangd"
   }
 })
 
-local on_attach = function(client, _)
+local on_attach = function(client, bufnr)
     client.server_capabilities.semanticTokensProvider = nil
+    local bufopts = { noremap = true, silent = true, buffer = bufnr }
 
-    vim.keymap.set('n', '<leader>rn', vim.lsp_zero.buf.rename, {})
-    vim.keymap.set('n', '<leader>ca', vim.lsp_zero.buf.code_action, {})
-
-    vim.keymap.set('n', 'gd', vim.lsp_zero.buf.definition, {})
-    vim.keymap.set('n', 'gD', vim.lsp_zero.buf.declaration, {})
-    vim.keymap.set('n', 'gi', vim.lsp_zero.buf.implementation, {})
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, {})
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
     vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references, {})
-    vim.keymap.set('n', 'K', vim.lsp_zero.buf.hover, {})
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
+    vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts)
 end
+
+lsp_zero.on_attach(on_attach)
 
 require("lspconfig").lua_ls.setup {
     on_attach = on_attach,
@@ -122,7 +111,13 @@ require("lspconfig").helm_ls.setup {
   },
   on_attach = on_attach
 }
+-- setup steep
+require("lspconfig").steep.setup {
+    on_attach = on_attach,
+    root_dir = require("lspconfig").util.root_pattern("Steepfile", ".steep", "sig")
+}
 
+-- setup yamlls
 -- setup yamlls
 require("lspconfig").yamlls.setup {}
 
